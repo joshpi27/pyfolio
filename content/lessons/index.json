@@ -1,0 +1,76 @@
+{
+  "lessons": [
+    {
+      "slug": "variables-strings",
+      "number": "01",
+      "title": "Variables, Types & Strings",
+      "shortTitle": "Variables & Strings",
+      "readTime": "6 min",
+      "summary": "Bind names cleanly, convert between strings and numbers, and format readable output with f-strings.",
+      "tags": ["types", "f-strings", "methods"]
+    },
+    {
+      "slug": "control-flow",
+      "number": "02",
+      "title": "Control Flow & Loops",
+      "shortTitle": "Control Flow & Loops",
+      "readTime": "7 min",
+      "summary": "Branch decisions with if/elif/else, understand truthiness, and iterate cleanly with enumerate and range.",
+      "tags": ["conditionals", "for loops", "enumerate"]
+    },
+    {
+      "slug": "functions-scope",
+      "number": "03",
+      "title": "Functions & Scope",
+      "shortTitle": "Functions & Scope",
+      "readTime": "8 min",
+      "summary": "Write reusable functions with parameters, return values, local scope, and safe default arguments.",
+      "tags": ["def", "return", "scope"]
+    },
+    {
+      "slug": "data-structures",
+      "number": "04",
+      "title": "Lists, Tuples, Dicts & Sets",
+      "shortTitle": "Core Data Structures",
+      "readTime": "8 min",
+      "summary": "Choose the right container for each job: slicing lists, dictionary .get(), sets, and comprehensions.",
+      "tags": ["list", "dict", "comprehension"]
+    },
+    {
+      "slug": "errors-exceptions",
+      "number": "05",
+      "title": "Error Handling & Assertions",
+      "shortTitle": "Errors & Exceptions",
+      "readTime": "7 min",
+      "summary": "Read Python tracebacks, catch specific exceptions with try/except, and validate inputs with ValueError.",
+      "tags": ["try/except", "ValueError", "assert"]
+    },
+    {
+      "slug": "files-json",
+      "number": "06",
+      "title": "Working with Files & JSON",
+      "shortTitle": "Files & JSON",
+      "readTime": "8 min",
+      "summary": "Read and write structured data safely using pathlib, context managers (with), and the json module.",
+      "tags": ["pathlib", "with open", "json"]
+    },
+    {
+      "slug": "classes-dataclasses",
+      "number": "07",
+      "title": "Classes & Dataclasses",
+      "shortTitle": "Classes & Dataclasses",
+      "readTime": "9 min",
+      "summary": "Model structured records and behaviors using Python classes, methods, and @dataclass.",
+      "tags": ["class", "methods", "@dataclass"]
+    },
+    {
+      "slug": "final-project",
+      "number": "08",
+      "title": "Mini-Project: Expense Ledger",
+      "shortTitle": "Final Mini-Project",
+      "readTime": "10 min",
+      "summary": "Combine dataclasses, dicts, validation, JSON persistence, and assertions into a working expense tracker.",
+      "tags": ["project", "json", "tests"]
+    }
+  ]
+}

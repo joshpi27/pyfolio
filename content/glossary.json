@@ -1,0 +1,102 @@
+{
+  "terms": [
+    {
+      "term": "Variable",
+      "category": "Fundamentals",
+      "definition": "A name bound to an object in memory using `=`. In Python, types belong to objects rather than variable declarations.",
+      "example": "count = 10",
+      "lessonSlug": "variables-strings"
+    },
+    {
+      "term": "Immutable",
+      "category": "Types",
+      "definition": "An object whose value cannot be changed after creation, such as `str`, `int`, or `tuple`. Operations on immutable objects return new objects.",
+      "example": "text = text.strip()",
+      "lessonSlug": "variables-strings"
+    },
+    {
+      "term": "f-string",
+      "category": "Strings",
+      "definition": "A formatted string literal prefixed with `f` that evaluates Python expressions inside `{...}` braces.",
+      "example": "f\"Total: ${total:.2f}\"",
+      "lessonSlug": "variables-strings"
+    },
+    {
+      "term": "Truthiness",
+      "category": "Control Flow",
+      "definition": "How non-boolean values behave in `if` conditions. Empty collections (`[]`, `{}`, `\"\"`), `0`, and `None` evaluate as falsy; non-empty collections and non-zero numbers are truthy.",
+      "example": "if items: print(\"Not empty\")",
+      "lessonSlug": "control-flow"
+    },
+    {
+      "term": "Scope",
+      "category": "Functions",
+      "definition": "The region of code where a variable name is visible. Variables assigned inside a function belong to local scope and do not leak outside.",
+      "example": "def f(): x = 1  # x is local to f",
+      "lessonSlug": "functions-scope"
+    },
+    {
+      "term": "Mutable Default Argument",
+      "category": "Pitfalls",
+      "definition": "A list or dict placed directly as a function parameter default (`def f(x=[]):`), which Python evaluates once and shares across all calls.",
+      "example": "def f(x=None): x = [] if x is None else x",
+      "lessonSlug": "functions-scope"
+    },
+    {
+      "term": "List Comprehension",
+      "category": "Collections",
+      "definition": "A concise syntax for building a new list by transforming and optionally filtering items from an iterable.",
+      "example": "[n * 2 for n in nums if n > 0]",
+      "lessonSlug": "data-structures"
+    },
+    {
+      "term": "Aliasing",
+      "category": "Pitfalls",
+      "definition": "When two variables refer to the exact same mutable object in memory, so modifying one affects the other.",
+      "example": "copy_list = original.copy()  # avoids aliasing",
+      "lessonSlug": "data-structures"
+    },
+    {
+      "term": "Traceback",
+      "category": "Debugging",
+      "definition": "The call-stack report Python prints when an unhandled exception occurs. Read it from bottom to top to find the error type and origin line.",
+      "example": "ValueError: invalid literal for int()",
+      "lessonSlug": "errors-exceptions"
+    },
+    {
+      "term": "Exception",
+      "category": "Errors",
+      "definition": "A runtime error object (like `ValueError`, `KeyError`, or `TypeError`) that interrupts normal execution unless handled with `try` / `except`.",
+      "example": "try: int(s) except ValueError: ...",
+      "lessonSlug": "errors-exceptions"
+    },
+    {
+      "term": "Context Manager",
+      "category": "Files",
+      "definition": "An object used with the `with` statement that automatically runs setup and cleanup (such as closing an open file) even if an error occurs.",
+      "example": "with Path(\"file.json\").open(\"r\", encoding=\"utf-8\") as f:",
+      "lessonSlug": "files-json"
+    },
+    {
+      "term": "JSON (JavaScript Object Notation)",
+      "category": "Data Exchange",
+      "definition": "A lightweight text format for storing and exchanging structured objects (`dict`), arrays (`list`), strings, numbers, booleans, and `null`.",
+      "example": "json.dumps(data, indent=2)",
+      "lessonSlug": "files-json"
+    },
+    {
+      "term": "Dataclass",
+      "category": "OOP",
+      "definition": "A class decorated with `@dataclass` that automatically generates `__init__`, `__repr__`, and equality checks from field type annotations.",
+      "example": "@dataclass class Expense: amount: float",
+      "lessonSlug": "classes-dataclasses"
+    },
+    {
+      "term": "Assertion",
+      "category": "Testing",
+      "definition": "An `assert condition` statement that raises `AssertionError` if the condition is false, useful for catching bugs in tests.",
+      "example": "assert total == 52.75",
+      "lessonSlug": "final-project"
+    }
+  ]
+}

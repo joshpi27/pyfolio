@@ -1,0 +1,77 @@
+{
+  "slug": "data-structures",
+  "number": "04",
+  "title": "Lists, Tuples, Dicts & Sets",
+  "readTime": "8 min",
+  "subtitle": "Pick the right built-in container for ordered items, fixed pairs, fast key lookups, and unique membership.",
+  "sections": [
+    {
+      "heading": "Choosing the right container",
+      "paragraphs": [
+        "Python's four core collections cover most everyday data tasks cleanly when matched to their strengths:"
+      ],
+      "bullets": [
+        "<strong>List</strong> (<code>[...]</code>): ordered, mutable sequence; supports slicing (<code>items[1:4]</code>) and comprehensions.",
+        "<strong>Tuple</strong> (<code>(...)</code>): ordered, immutable sequence; ideal for fixed records like <code>(lat, lon)</code>.",
+        "<strong>Dictionary</strong> (<code>{k: v}</code>): fast key-to-value mapping; use <code>counts.get(key, 0)</code> for safe defaults.",
+        "<strong>Set</strong> (<code>{a, b}</code>): unordered unique items with fast <code>x in seen</code> membership checks."
+      ]
+    },
+    {
+      "heading": "List and dictionary comprehensions",
+      "paragraphs": [
+        "Comprehensions express transformations and filters in one readable expression: <code>[x * 2 for x in nums if x > 0]</code>. Keep comprehensions concise—if you need nested conditions, a regular <code>for</code> loop is clearer."
+      ]
+    }
+  ],
+  "marginNote": {
+    "title": "Common Mistakes: Aliasing Lists with b = a",
+    "paragraphs": [
+      "Writing <code>backup = scores</code> does NOT copy the list—both names point to the exact same list object in memory! Appending to <code>scores</code> mutates <code>backup</code> too.",
+      "Make a shallow copy with <code>backup = scores.copy()</code> or <code>scores[:]</code> whenever you want an independent list."
+    ]
+  },
+  "mainCell": {
+    "title": "Counting words with dict.get(), sets, and comprehensions",
+    "code": "words = [\"python\", \"code\", \"python\", \"loop\", \"code\", \"python\", \"dict\"]\n\n# Count frequencies safely\nfreq = {}\nfor w in words:\n    freq[w] = freq.get(w, 0) + 1\n\nunique_words = set(words)\nrepeated = [word for word, count in freq.items() if count > 1]\n\nprint(\"Frequencies:\", freq)\nprint(\"Unique count:\", len(unique_words))\nprint(\"Repeated words:\", sorted(repeated))"
+  },
+  "breakIt": {
+    "title": "Try Breaking It: Fix the KeyError and accidental list aliasing",
+    "prompt": "This snippet has two bugs: (1) `original` gets mutated when `working` is modified because `working = original` is an alias, and (2) `inventory['oranges']` raises `KeyError`. Fix both!",
+    "buggyCode": "original = [10, 20, 30]\nworking = original  # Bug 1: alias, not a copy!\nworking.append(99)\n\ninventory = {\"apples\": 5, \"bananas\": 2}\n# Bug 2: 'oranges' is missing -> KeyError!\noranges = inventory[\"oranges\"]\n\nprint(\"Original (should still be [10, 20, 30]):\", original)\nprint(\"Oranges:\", oranges)",
+    "hint": "Use `working = original.copy()` and `inventory.get(\"oranges\", 0)`.",
+    "solution": "original = [10, 20, 30]\nworking = original.copy()\nworking.append(99)\n\ninventory = {\"apples\": 5, \"bananas\": 2}\noranges = inventory.get(\"oranges\", 0)\n\nprint(\"Original:\", original)\nprint(\"Working:\", working)\nprint(\"Oranges:\", oranges)\nassert original == [10, 20, 30]"
+  },
+  "quiz": [
+    {
+      "question": "What does `counts.get(\"missing\", 0)` return if `\"missing\"` is not in `counts`?",
+      "options": [
+        "`0` without raising a `KeyError`",
+        "Raises a `KeyError`",
+        "Inserts `\"missing\": 0` into `counts` automatically"
+      ],
+      "answerIndex": 0,
+      "explanation": "`.get(key, default)` safely returns the fallback value without modifying the dictionary or raising `KeyError`."
+    },
+    {
+      "question": "If `a = [1, 2]` and `b = a`, what happens after `b.append(3)`?",
+      "options": [
+        "`a` is also `[1, 2, 3]` because `a` and `b` reference the same list.",
+        "`a` stays `[1, 2]` while `b` becomes `[1, 2, 3]`.",
+        "Python raises a `TypeError`."
+      ],
+      "answerIndex": 0,
+      "explanation": "Assignment binds a new name to the existing object; use `.copy()` to create a separate list."
+    },
+    {
+      "question": "Which built-in type automatically keeps only unique elements and supports fast `in` lookups?",
+      "options": [
+        "`set`",
+        "`list`",
+        "`tuple`"
+      ],
+      "answerIndex": 0,
+      "explanation": "Sets store distinct hashable elements with average O(1) membership testing."
+    }
+  ]
+}

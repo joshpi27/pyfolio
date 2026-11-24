@@ -1,0 +1,28 @@
+{
+  "snippets": [
+    {
+      "id": "word-counter",
+      "title": "Word Frequency Counter",
+      "description": "Clean punctuation, count word frequencies with collections.Counter, and print the top words.",
+      "code": "from collections import Counter\n\ntext = \"Python is readable. Python is expressive, and clean Python code is easy to test.\"\nclean_words = [w.strip(\".,!?\").lower() for w in text.split()]\ncounts = Counter(clean_words)\n\nfor word, n in counts.most_common(4):\n    print(f\"{word:<12} -> {n}\")"
+    },
+    {
+      "id": "list-comprehension",
+      "title": "Filtering & Transforming Records",
+      "description": "Filter dictionaries and format summary strings with a list comprehension.",
+      "code": "tasks = [\n    {\"title\": \"Read docs\", \"mins\": 15, \"done\": True},\n    {\"title\": \"Write tests\", \"mins\": 25, \"done\": False},\n    {\"title\": \"Refactor loop\", \"mins\": 20, \"done\": False},\n]\n\nremaining = [t for t in tasks if not t[\"done\"]]\ntotal_mins = sum(t[\"mins\"] for t in remaining)\n\nprint(\"Remaining tasks:\", [t[\"title\"] for t in remaining])\nprint(f\"Estimated time left: {total_mins} min\")"
+    },
+    {
+      "id": "json-roundtrip",
+      "title": "Virtual File & JSON Round-Trip",
+      "description": "Write a Python dictionary to Pyodide's virtual filesystem and read it back.",
+      "code": "import json\nfrom pathlib import Path\n\npath = Path(\"sample.json\")\npayload = {\"language\": \"Python\", \"version\": 3, \"features\": [\"f-strings\", \"dataclasses\"]}\n\npath.write_text(json.dumps(payload, indent=2), encoding=\"utf-8\")\nrestored = json.loads(path.read_text(encoding=\"utf-8\"))\n\nprint(\"Restored:\", restored)\nassert restored == payload"
+    },
+    {
+      "id": "dataclass-sort",
+      "title": "Sorting Dataclasses",
+      "description": "Sort a list of @dataclass objects by a numeric field using sorted(..., key=...).",
+      "code": "from dataclasses import dataclass\n\n@dataclass\nclass Benchmark:\n    name: str\n    ms: float\n\nruns = [Benchmark(\"dict lookup\", 0.4), Benchmark(\"list scan\", 12.8), Benchmark(\"set check\", 0.3)]\nfor item in sorted(runs, key=lambda r: r.ms):\n    print(f\"{item.name:<14} {item.ms:.1f} ms\")"
+    }
+  ]
+}

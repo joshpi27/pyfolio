@@ -1,0 +1,76 @@
+{
+  "slug": "classes-dataclasses",
+  "number": "07",
+  "title": "Classes & Dataclasses",
+  "readTime": "9 min",
+  "subtitle": "Bundle related data and behavior into clean Python classes and reduce boilerplate with @dataclass.",
+  "sections": [
+    {
+      "heading": "Modeling domain objects with classes",
+      "paragraphs": [
+        "When plain dictionaries start getting passed through half a dozen functions with keys like <code>record[\"amount\"]</code>, it becomes easy to mistype a key name. A <code>class</code> gives your data a clear blueprint, attribute access (<code>task.done</code>), and methods that operate on that instance via <code>self</code>."
+      ]
+    },
+    {
+      "heading": "Cleaner data records with @dataclass",
+      "paragraphs": [
+        "For classes whose main job is holding structured fields, Python's <code>@dataclass</code> decorator automatically generates <code>__init__</code>, a readable <code>__repr__</code>, and equality comparisons (<code>==</code>)—while still letting you add custom methods."
+      ],
+      "bullets": [
+        "Always put <code>self</code> as the first parameter of instance methods.",
+        "Use <code>field(default_factory=list)</code> for mutable default attributes in dataclasses.",
+        "Add type hints (<code>title: str</code>, <code>done: bool = False</code>) so fields are self-documenting."
+      ]
+    }
+  ],
+  "marginNote": {
+    "title": "Common Mistakes: Class Attributes vs. Instance Attributes",
+    "paragraphs": [
+      "Defining a mutable list directly on a plain class body (<code>items = []</code> outside <code>__init__</code>) shares that single list across ALL instances of the class!",
+      "Either initialize `self.items = []` inside `__init__`, or in a `@dataclass` use `items: list = field(default_factory=list)`."
+    ]
+  },
+  "mainCell": {
+    "title": "Task checklist modeled with @dataclass",
+    "code": "from dataclasses import dataclass, field\n\n@dataclass\nclass StudyTask:\n    title: str\n    minutes: int\n    done: bool = False\n    tags: list = field(default_factory=list)\n\n    def complete(self):\n        self.done = True\n\n    def summary(self):\n        status = \"DONE\" if self.done else \"TODO\"\n        return f\"[{status}] {self.title} ({self.minutes} min)\"\n\nt1 = StudyTask(\"Read Lesson 07\", 10, tags=[\"python\"])\nt2 = StudyTask(\"Solve debugging cell\", 15)\nt1.complete()\n\nprint(t1)\nprint(t1.summary())\nprint(t2.summary())"
+  },
+  "breakIt": {
+    "title": "Try Breaking It: Fix the missing self and shared class list",
+    "prompt": "Run the cell below. First, `add_step` is missing `self` as its first parameter; second, `steps = []` on the class body is shared between `plan_a` and `plan_b`! Move `self.steps = []` into `__init__` and add `self` to `add_step`.",
+    "buggyCode": "class StudyPlan:\n    steps = []  # Bug 1: class-level mutable list shared across all instances!\n\n    def __init__(self, name):\n        self.name = name\n\n    # Bug 2: missing 'self' parameter!\n    def add_step(step):\n        self.steps.append(step)\n\nplan_a = StudyPlan(\"Python\")\nplan_b = StudyPlan(\"Testing\")\nplan_a.add_step(\"Loops\")\n\nprint(\"Plan A steps:\", plan_a.steps)\nprint(\"Plan B steps (should be []):\", plan_b.steps)\nassert plan_b.steps == []",
+    "hint": "Move `self.steps = []` inside `__init__(self, name)` and change `def add_step(step):` to `def add_step(self, step):`.",
+    "solution": "class StudyPlan:\n    def __init__(self, name):\n        self.name = name\n        self.steps = []\n\n    def add_step(self, step):\n        self.steps.append(step)\n\nplan_a = StudyPlan(\"Python\")\nplan_b = StudyPlan(\"Testing\")\nplan_a.add_step(\"Loops\")\n\nprint(\"Plan A steps:\", plan_a.steps)\nprint(\"Plan B steps (should be []):\", plan_b.steps)\nassert plan_b.steps == []"
+  },
+  "quiz": [
+    {
+      "question": "What does the `@dataclass` decorator generate automatically for a class?",
+      "options": [
+        "`__init__`, `__repr__`, and `__eq__` based on the annotated fields.",
+        "A web server and JSON API.",
+        "An automatic `for` loop."
+      ],
+      "answerIndex": 0,
+      "explanation": "`@dataclass` removes repetitive boilerplate for data-holding classes while keeping standard Python class capabilities."
+    },
+    {
+      "question": "Why does `@dataclass` forbid `tags: list = []` directly and require `field(default_factory=list)`?",
+      "options": [
+        "To prevent every instance from accidentally sharing the exact same mutable list object.",
+        "Because dataclasses cannot hold lists.",
+        "Because `field` sorts the list alphabetically."
+      ],
+      "answerIndex": 0,
+      "explanation": "`default_factory=list` calls `list()` freshly for each new instance."
+    },
+    {
+      "question": "What does `self` refer to inside an instance method?",
+      "options": [
+        "The specific object instance on which the method was called.",
+        "The Python interpreter itself.",
+        "Every instance of the class at once."
+      ],
+      "answerIndex": 0,
+      "explanation": "When you call `t1.complete()`, Python passes `t1` automatically as the first argument (`self`)."
+    }
+  ]
+}

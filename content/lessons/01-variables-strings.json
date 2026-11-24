@@ -1,0 +1,77 @@
+{
+  "slug": "variables-strings",
+  "number": "01",
+  "title": "Variables, Types & Strings",
+  "readTime": "6 min",
+  "subtitle": "Bind values to names, understand Python's dynamic types, and format clean text with f-strings.",
+  "sections": [
+    {
+      "heading": "Names point to typed objects",
+      "paragraphs": [
+        "In Python, you assign a name with <code>=</code> without declaring a type keyword first. However, every value still has a strict runtime type—such as <code>int</code> (whole number), <code>float</code> (decimal), <code>bool</code> (<code>True</code>/<code>False</code>), or <code>str</code> (text).",
+        "You can inspect any value's type with <code>type(value)</code> and convert explicitly with <code>int()</code>, <code>float()</code>, or <code>str()</code>."
+      ]
+    },
+    {
+      "heading": "Formatting and cleaning strings",
+      "paragraphs": [
+        "Strings are immutable sequences of characters. Use <code>f\"...\"</code> (f-strings) to embed expressions directly inside braces, and use methods like <code>.strip()</code> and <code>.lower()</code> to normalize messy input."
+      ],
+      "bullets": [
+        "<code>text.strip()</code> removes leading and trailing whitespace.",
+        "<code>f\"{price:.2f}\"</code> formats a float to 2 decimal places.",
+        "Use <code>int(\"42\")</code> before doing arithmetic on text digits."
+      ]
+    }
+  ],
+  "marginNote": {
+    "title": "Common Mistakes: Adding Strings to Numbers",
+    "paragraphs": [
+      "Writing <code>\"Age: \" + 25</code> or <code>\"10\" + 5</code> raises a <code>TypeError</code> because Python refuses to guess whether you meant text concatenation or numeric addition.",
+      "Convert explicitly with <code>int()</code> / <code>float()</code> for math, or use an f-string like <code>f\"Age: {age}\"</code> for display."
+    ]
+  },
+  "mainCell": {
+    "title": "Parsing raw text input and formatting with f-strings",
+    "code": "raw_name = \"  ada lovelace  \"\nraw_hours = \"12.5\"\nhourly_rate = 40\n\nclean_name = raw_name.strip().title()\nhours = float(raw_hours)\npay = hours * hourly_rate\n\nprint(\"Name type:\", type(clean_name).__name__)\nprint(\"Hours type:\", type(hours).__name__)\nprint(f\"{clean_name} worked {hours:.1f}h -> total ${pay:.2f}\")"
+  },
+  "breakIt": {
+    "title": "Try Breaking It: Fix the TypeError from string input",
+    "prompt": "Run the cell below to see Python raise a TypeError when multiplying/adding unparsed text. Convert `raw_qty` and `raw_price` to numbers so the total computes cleanly.",
+    "buggyCode": "item = \"Notebook\"\nraw_qty = \"3\"\nraw_price = \"4.50\"\n\n# Bug: raw_qty * raw_price tries to multiply two strings!\ntotal = raw_qty * raw_price\nprint(f\"{item} x{raw_qty} = ${total:.2f}\")",
+    "hint": "Wrap `raw_qty` with `int(raw_qty)` and `raw_price` with `float(raw_price)` before multiplying.",
+    "solution": "item = \"Notebook\"\nraw_qty = \"3\"\nraw_price = \"4.50\"\n\nqty = int(raw_qty)\nprice = float(raw_price)\ntotal = qty * price\nprint(f\"{item} x{qty} = ${total:.2f}\")"
+  },
+  "quiz": [
+    {
+      "question": "What does `\"3\" + \"4\"` evaluate to in Python?",
+      "options": [
+        "`\"34\"` (string concatenation)",
+        "`7` (integer addition)",
+        "Raises a `SyntaxError`"
+      ],
+      "answerIndex": 0,
+      "explanation": "Both operands are strings (`str`), so `+` joins them end-to-end into `\"34\"`."
+    },
+    {
+      "question": "Which expression formats `ratio = 0.756` as `\"0.76\"`?",
+      "options": [
+        "`f\"{ratio:.2f}\"`",
+        "`f\"{ratio:2d}\"`",
+        "`ratio.strip(2)`"
+      ],
+      "answerIndex": 0,
+      "explanation": "Inside an f-string, `:.2f` formats a floating-point number to 2 digits after the decimal point."
+    },
+    {
+      "question": "Why does `name.strip()` not change `name` unless you reassign `name = name.strip()`?",
+      "options": [
+        "Python strings are immutable, so string methods return a new string.",
+        "`.strip()` only works inside `print()`.",
+        "Strings are always deleted after `.strip()`."
+      ],
+      "answerIndex": 0,
+      "explanation": "Because `str` is immutable in Python, methods return a fresh string without mutating the original."
+    }
+  ]
+}

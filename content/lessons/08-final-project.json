@@ -1,0 +1,77 @@
+{
+  "slug": "final-project",
+  "number": "08",
+  "title": "Mini-Project: Expense Ledger",
+  "readTime": "10 min",
+  "subtitle": "Bring together functions, dataclasses, dictionaries, validation, JSON files, and assertions in a complete Python expense tracker.",
+  "sections": [
+    {
+      "heading": "Putting the pieces together",
+      "paragraphs": [
+        "In this capstone notebook, you will assemble a small but realistic Python module: an <code>ExpenseLedger</code> that validates entries, groups totals by category, persists records to JSON, reloads them cleanly, and verifies its own behavior with <code>assert</code> checks."
+      ]
+    },
+    {
+      "heading": "How the ledger is structured",
+      "paragraphs": [
+        "Notice how each concept from Lessons 01–07 earns its keep:"
+      ],
+      "bullets": [
+        "<code>@dataclass</code> models each <code>Expense(category, amount, note)</code> cleanly.",
+        "<code>ValueError</code> guards against negative or zero amounts.",
+        "A dictionary with <code>.get()</code> accumulates category totals.",
+        "<code>json.dump</code> / <code>json.load</code> + <code>Path</code> save and restore the ledger."
+      ]
+    }
+  ],
+  "marginNote": {
+    "title": "Common Mistakes: Mixing Business Logic with Print Calls",
+    "paragraphs": [
+      "If your <code>totals_by_category()</code> method prints text instead of returning a <code>dict</code>, you cannot easily test it with <code>assert</code> or serialize it to JSON.",
+      "Keep calculation methods returning pure data structures, and format strings only at the final display step."
+    ]
+  },
+  "mainCell": {
+    "title": "Complete ExpenseLedger with JSON save/load and assertions",
+    "code": "from dataclasses import asdict, dataclass\nimport json\nfrom pathlib import Path\n\n@dataclass\nclass Expense:\n    category: str\n    amount: float\n    note: str = \"\"\n\nclass ExpenseLedger:\n    def __init__(self):\n        self.entries = []\n\n    def add(self, category, amount, note=\"\"):\n        if amount <= 0:\n            raise ValueError(f\"Amount must be positive, got {amount}\")\n        clean_cat = category.strip().lower()\n        self.entries.append(Expense(clean_cat, round(float(amount), 2), note.strip()))\n\n    def total(self):\n        return round(sum(e.amount for e in self.entries), 2)\n\n    def by_category(self):\n        totals = {}\n        for e in self.entries:\n            totals[e.category] = round(totals.get(e.category, 0.0) + e.amount, 2)\n        return totals\n\n    def save_json(self, path):\n        data = [asdict(e) for e in self.entries]\n        with Path(path).open(\"w\", encoding=\"utf-8\") as f:\n            json.dump(data, f, indent=2)\n\n    @classmethod\n    def load_json(cls, path):\n        with Path(path).open(\"r\", encoding=\"utf-8\") as f:\n            raw = json.load(f)\n        ledger = cls()\n        for row in raw:\n            ledger.add(row[\"category\"], row[\"amount\"], row.get(\"note\", \"\"))\n        return ledger\n\nledger = ExpenseLedger()\nledger.add(\"Food\", 14.50, \"Lunch\")\nledger.add(\"Books\", 32.00, \"Python guide\")\nledger.add(\"food\", 6.25, \"Coffee\")\n\nledger_file = Path(\"ledger.json\")\nledger.save_json(ledger_file)\nreloaded = ExpenseLedger.load_json(ledger_file)\n\nassert reloaded.total() == 52.75\nassert reloaded.by_category() == {\"food\": 20.75, \"books\": 32.0}\n\nprint(f\"Total spent: ${reloaded.total():.2f}\")\nfor cat, amt in reloaded.by_category().items():\n    print(f\"  - {cat:<8}: ${amt:.2f}\")"
+  },
+  "breakIt": {
+    "title": "Try Breaking It: Fix the unnormalized categories and missing validation",
+    "prompt": "This simplified `add_expense` helper forgets to normalize category casing (`\"Food\"` vs `\"food\"` split into separate keys!) and allows negative amounts through. Normalize categories with `.strip().lower()` and raise `ValueError` for `amount <= 0`.",
+    "buggyCode": "def add_expense(totals, category, amount):\n    # Bug 1: allows negative or zero amounts\n    # Bug 2: does not normalize category whitespace/casing\n    totals[category] = totals.get(category, 0.0) + amount\n\ntotals = {}\nadd_expense(totals, \"Food\", 12.0)\nadd_expense(totals, \" food \", 8.0)\nprint(\"Broken totals (should combine 'food' -> 20.0):\", totals)\nassert totals == {\"food\": 20.0}, f\"Got {totals}\"",
+    "hint": "Add `if amount <= 0: raise ValueError(...)` and set `key = category.strip().lower()` before updating `totals[key]`.",
+    "solution": "def add_expense(totals, category, amount):\n    if amount <= 0:\n        raise ValueError(\"Amount must be positive\")\n    key = category.strip().lower()\n    totals[key] = round(totals.get(key, 0.0) + amount, 2)\n\ntotals = {}\nadd_expense(totals, \"Food\", 12.0)\nadd_expense(totals, \" food \", 8.0)\nprint(\"Normalized totals:\", totals)\nassert totals == {\"food\": 20.0}"
+  },
+  "quiz": [
+    {
+      "question": "Why did `ExpenseLedger.add()` normalize `category.strip().lower()` before storing?",
+      "options": [
+        "So inputs like `\"Food\"` and `\" food \"` group cleanly under a single `\"food\"` key.",
+        "Because Python dictionaries cannot store uppercase strings.",
+        "To sort dictionary keys alphabetically."
+      ],
+      "answerIndex": 0,
+      "explanation": "Normalizing string keys on input prevents duplicate buckets caused by casing or trailing spaces."
+    },
+    {
+      "question": "What does `dataclasses.asdict(expense)` return?",
+      "options": [
+        "A plain Python dictionary of the dataclass's fields, ready for `json.dump()`.",
+        "A formatted JSON string.",
+        "A new `Expense` class."
+      ],
+      "answerIndex": 0,
+      "explanation": "`asdict()` converts a dataclass instance into a standard `dict` that `json` can serialize."
+    },
+    {
+      "question": "Why are `assert reloaded.total() == 52.75` checks valuable in small projects?",
+      "options": [
+        "They verify automatically that saving, reloading, and totaling behave as expected after every edit.",
+        "They speed up JSON parsing.",
+        "They replace the need for `ValueError` validation."
+      ],
+      "answerIndex": 0,
+      "explanation": "Lightweight assertions catch regressions immediately whenever you refactor your code."
+    }
+  ]
+}

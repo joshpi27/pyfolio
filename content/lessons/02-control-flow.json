@@ -1,0 +1,76 @@
+{
+  "slug": "control-flow",
+  "number": "02",
+  "title": "Control Flow & Loops",
+  "readTime": "7 min",
+  "subtitle": "Direct program execution using clear conditionals, truthiness rules, and Pythonic loops with enumerate().",
+  "sections": [
+    {
+      "heading": "Conditionals and truthiness",
+      "paragraphs": [
+        "Python uses <code>if</code>, <code>elif</code>, and <code>else</code> with indentation (typically 4 spaces) to define code blocks. Conditions evaluate either booleans directly or Python's <em>truthiness</em> rules: empty collections (<code>[]</code>, <code>\"\"</code>, <code>{}</code>), <code>0</code>, and <code>None</code> are falsy; non-empty collections and non-zero numbers are truthy."
+      ]
+    },
+    {
+      "heading": "Iterating cleanly without manual index counters",
+      "paragraphs": [
+        "Instead of writing <code>i = 0; while i < len(items): ...</code>, Python's <code>for</code> loop iterates directly over elements. When you also need each item's position, wrap the iterable in <code>enumerate(items, start=1)</code>."
+      ],
+      "bullets": [
+        "Use <code>break</code> to exit a loop early when a target is found.",
+        "Use <code>continue</code> to skip to the next iteration.",
+        "Use <code>range(start, stop, step)</code> to loop over integer sequences."
+      ]
+    }
+  ],
+  "marginNote": {
+    "title": "Common Mistakes: Ordering Overlapping elif Branches",
+    "paragraphs": [
+      "Python runs only the <em>first</em> matching <code>if</code>/<code>elif</code> branch. Checking <code>if score >= 60:</code> before <code>elif score >= 90:</code> traps a score of 95 in the first branch!",
+      "Always order threshold checks from strictest (highest) to broadest (lowest), or use explicit bounds."
+    ]
+  },
+  "mainCell": {
+    "title": "Grading thresholds and enumerate() iteration",
+    "code": "def letter_grade(score):\n    if score >= 90:\n        return \"A\"\n    elif score >= 80:\n        return \"B\"\n    elif score >= 70:\n        return \"C\"\n    else:\n        return \"Review\"\n\nstudents = [(\"Linus\", 92), (\"Maya\", 84), (\"Sam\", 67), (\"Nora\", 95)]\n\nfor rank, (name, score) in enumerate(students, start=1):\n    grade = letter_grade(score)\n    print(f\"{rank}. {name:<6} | score={score} -> {grade}\")"
+  },
+  "breakIt": {
+    "title": "Try Breaking It: Fix the misordered elif ladder",
+    "prompt": "Run the cell below. Notice that `score = 96` gets labeled `'Pass'` instead of `'Honors'` because the broader condition comes first! Reorder the branches so the assertion passes.",
+    "buggyCode": "def classify(score):\n    if score >= 50:\n        return \"Pass\"\n    elif score >= 85:\n        return \"Honors\"\n    else:\n        return \"Retake\"\n\nresult = classify(96)\nprint(\"Score 96 ->\", result)\nassert result == \"Honors\", f\"Expected Honors, got {result}\"",
+    "hint": "Check `score >= 85` first, then `elif score >= 50:`.",
+    "solution": "def classify(score):\n    if score >= 85:\n        return \"Honors\"\n    elif score >= 50:\n        return \"Pass\"\n    else:\n        return \"Retake\"\n\nresult = classify(96)\nprint(\"Score 96 ->\", result)\nassert result == \"Honors\""
+  },
+  "quiz": [
+    {
+      "question": "Which value is considered truthy in `if value:`?",
+      "options": [
+        "`[0]` (a non-empty list containing zero)",
+        "`[]` (an empty list)",
+        "`\"\"` (an empty string)"
+      ],
+      "answerIndex": 0,
+      "explanation": "Any non-empty list is truthy regardless of its contents; empty sequences and `0` are falsy."
+    },
+    {
+      "question": "What does `enumerate([\"a\", \"b\"], start=1)` yield on its first iteration?",
+      "options": [
+        "`(1, \"a\")`",
+        "`(0, \"a\")`",
+        "`\"a\"`"
+      ],
+      "answerIndex": 0,
+      "explanation": "Setting `start=1` begins the counter at `1` while yielding `(index, element)` pairs."
+    },
+    {
+      "question": "What does `continue` do inside a `for` loop?",
+      "options": [
+        "Skips the rest of the current iteration and moves to the next item.",
+        "Terminates the entire loop immediately.",
+        "Restarts the whole script from line 1."
+      ],
+      "answerIndex": 0,
+      "explanation": "`continue` jumps straight to the next loop item, whereas `break` exits the loop completely."
+    }
+  ]
+}

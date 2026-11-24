@@ -1,0 +1,77 @@
+{
+  "slug": "errors-exceptions",
+  "number": "05",
+  "title": "Error Handling & Assertions",
+  "readTime": "7 min",
+  "subtitle": "Read tracebacks calmly, handle expected failures with specific try/except blocks, and enforce invariants with raise and assert.",
+  "sections": [
+    {
+      "heading": "Reading tracebacks and catching specific errors",
+      "paragraphs": [
+        "When Python raises an exception, read the traceback from the <strong>bottom up</strong>: the last line gives the exception type and message, while the lines above show the exact file and line that triggered it.",
+        "Use <code>try</code> / <code>except SpecificError</code> only for recoverable situations (such as bad user input or missing keys), and keep the <code>try</code> block as small as possible."
+      ]
+    },
+    {
+      "heading": "Raising ValueError vs. using assert",
+      "paragraphs": [
+        "Validate public function arguments with explicit <code>if ...: raise ValueError(...)</code> checks. Reserve <code>assert</code> for internal sanity checks and automated tests."
+      ],
+      "bullets": [
+        "Catch specific exceptions like <code>ValueError</code> or <code>ZeroDivisionError</code>, not a bare <code>except:</code>.",
+        "The optional <code>else</code> block runs only when <code>try</code> succeeded with no exception.",
+        "<code>finally</code> always runs, making it useful for cleanup."
+      ]
+    }
+  ],
+  "marginNote": {
+    "title": "Common Mistakes: Catching Everything with Bare except:",
+    "paragraphs": [
+      "Writing <code>except:</code> or <code>except Exception: pass</code> silently swallows real bugs like typos (<code>NameError</code>) or logic errors, leaving your program broken with no clue why.",
+      "Always name the exact exception you expect to recover from, such as <code>except ValueError:</code>."
+    ]
+  },
+  "mainCell": {
+    "title": "Safe parsing with try/except ValueError and validation",
+    "code": "def parse_positive_int(text):\n    \"\"\"Parse a string into a positive integer or raise ValueError.\"\"\"\n    num = int(text)\n    if num <= 0:\n        raise ValueError(f\"Expected a positive integer, got {num}\")\n    return num\n\ninputs = [\"15\", \"-3\", \"abc\", \"42\"]\nparsed = []\n\nfor raw in inputs:\n    try:\n        val = parse_positive_int(raw)\n    except ValueError as err:\n        print(f\"Skipped {raw!r}: {err}\")\n    else:\n        parsed.append(val)\n\nprint(\"Valid positive integers:\", parsed)"
+  },
+  "breakIt": {
+    "title": "Try Breaking It: Expose the hidden bug swallowed by bare except",
+    "prompt": "Look closely at `safe_average`: a bare `except:` catches a typo (`totl` instead of `total`) and quietly returns `0.0`! Narrow the `except` clause to `ZeroDivisionError` and fix the typo.",
+    "buggyCode": "def safe_average(nums):\n    try:\n        total = sum(nums)\n        return totl / len(nums)  # Bug 1: typo 'totl' triggers NameError!\n    except:  # Bug 2: bare except hides the NameError and returns 0.0\n        return 0.0\n\nprint(\"Average of [10, 20, 30] (should be 20.0):\", safe_average([10, 20, 30]))\nassert safe_average([10, 20, 30]) == 20.0",
+    "hint": "Change `except:` to `except ZeroDivisionError:` so bugs fail loudly, then fix `totl` to `total`.",
+    "solution": "def safe_average(nums):\n    try:\n        total = sum(nums)\n        return total / len(nums)\n    except ZeroDivisionError:\n        return 0.0\n\nprint(\"Average of [10, 20, 30]:\", safe_average([10, 20, 30]))\nprint(\"Average of []:\", safe_average([]))\nassert safe_average([10, 20, 30]) == 20.0\nassert safe_average([]) == 0.0"
+  },
+  "quiz": [
+    {
+      "question": "Why is a bare `except:` block discouraged in Python?",
+      "options": [
+        "It catches unrelated programming bugs (like `NameError` or `KeyboardInterrupt`) and hides them.",
+        "Python does not allow `return` inside an `except:` block.",
+        "It runs slower than `for` loops."
+      ],
+      "answerIndex": 0,
+      "explanation": "Catching specific exceptions keeps unexpected bugs visible instead of silently masking them."
+    },
+    {
+      "question": "When does the `else:` clause of a `try / except / else` block execute?",
+      "options": [
+        "Only if the `try` block completed without raising an exception.",
+        "Only when an exception was caught.",
+        "Always, whether an exception occurred or not."
+      ],
+      "answerIndex": 0,
+      "explanation": "`else` runs only on the success path (`finally` is the block that always runs)."
+    },
+    {
+      "question": "Which exception should a function raise when given an argument of the right type (like `int`) but an invalid value (like `-5`)?",
+      "options": [
+        "`ValueError`",
+        "`SyntaxError`",
+        "`ImportError`"
+      ],
+      "answerIndex": 0,
+      "explanation": "`ValueError` signals that an argument has an acceptable type but an inappropriate value."
+    }
+  ]
+}

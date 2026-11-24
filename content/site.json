@@ -1,0 +1,9 @@
+{
+  "siteName": "PyFolio",
+  "subtitle": "Living Notebook",
+  "topic": "Python",
+  "heroEyebrow": "Interactive Python Notebook",
+  "heroHeadline": "Learn Python by Running Real Code",
+  "heroPromise": "Go from variables and functions to clean data structures, JSON files, and a working mini-project right in your browser.",
+  "heroCode": "# Edit any line below and click Run\ndef summarize_scores(scores):\n    total = sum(scores)\n    avg = total / len(scores)\n    return {\"count\": len(scores), \"average\": round(avg, 2), \"top\": max(scores)}\n\nquiz_scores = [78, 84, 91, 88, 95]\nreport = summarize_scores(quiz_scores)\nprint(f\"Summary -> count={report['count']}, avg={report['average']}, top={report['top']}\")"
+}

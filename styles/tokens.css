@@ -1,0 +1,115 @@
+/* ==========================================================================
+   Design Tokens — PyFolio ("The Living Notebook")
+   Dark Ink (#0B1020) + Warm Archival Paper Light Mode
+   Accents: Warm Amber + Cool Teal
+   ========================================================================== */
+
+:root {
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --header-height: 64px;
+  --sidebar-width: 280px;
+  --reading-max: 72ch;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 150ms;
+  --dur-med: 260ms;
+}
+
+/* Dark Ink Theme (Default) */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg-canvas: #0B1020;
+  --bg-surface: #11182C;
+  --bg-elevated: #172039;
+  --bg-code: #080C18;
+  --bg-code-header: #10172A;
+  --bg-hover: rgba(148, 163, 184, 0.08);
+
+  --text-primary: #F1F5F9;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+
+  --border-subtle: rgba(148, 163, 184, 0.16);
+  --border-strong: rgba(148, 163, 184, 0.3);
+
+  /* Warm Amber */
+  --accent-amber: #F59E0B;
+  --accent-amber-text: #FBBF24;
+  --accent-amber-soft: rgba(245, 158, 11, 0.13);
+  --accent-amber-border: rgba(245, 158, 11, 0.35);
+
+  /* Cool Teal */
+  --accent-teal: #14B8A6;
+  --accent-teal-text: #2DD4BF;
+  --accent-teal-soft: rgba(20, 184, 166, 0.13);
+  --accent-teal-border: rgba(45, 212, 191, 0.35);
+
+  /* Status */
+  --status-error: #F87171;
+  --status-error-soft: rgba(248, 113, 113, 0.12);
+  --status-error-border: rgba(248, 113, 113, 0.35);
+
+  --shadow-sm: 0 1px 2px rgba(2, 6, 23, 0.45);
+  --shadow-lg: 0 20px 50px rgba(2, 6, 23, 0.65);
+  --notebook-rule: rgba(148, 163, 184, 0.045);
+
+  /* Syntax Tokens (Dark Ink) */
+  --tok-comment: #7C8CA3;
+  --tok-string: #5EEAD4;
+  --tok-keyword: #FBBF24;
+  --tok-builtin: #93C5FD;
+  --tok-number: #FDBA74;
+  --tok-decorator: #C4B5FD;
+}
+
+/* Light Paper Theme */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg-canvas: #FAF8F5;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #F3EFE8;
+  --bg-code: #F4F1EA;
+  --bg-code-header: #EAE5DC;
+  --bg-hover: rgba(15, 23, 42, 0.05);
+
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #526075;
+
+  --border-subtle: rgba(15, 23, 42, 0.12);
+  --border-strong: rgba(15, 23, 42, 0.24);
+
+  --accent-amber: #B45309;
+  --accent-amber-text: #92400E;
+  --accent-amber-soft: rgba(217, 119, 6, 0.10);
+  --accent-amber-border: rgba(180, 83, 9, 0.32);
+
+  --accent-teal: #0F766E;
+  --accent-teal-text: #115E59;
+  --accent-teal-soft: rgba(13, 148, 136, 0.10);
+  --accent-teal-border: rgba(15, 118, 110, 0.32);
+
+  --status-error: #B91C1C;
+  --status-error-soft: rgba(185, 28, 28, 0.08);
+  --status-error-border: rgba(185, 28, 28, 0.3);
+
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.16);
+  --notebook-rule: rgba(15, 23, 42, 0.04);
+
+  /* Syntax Tokens (Light Paper) */
+  --tok-comment: #64748B;
+  --tok-string: #0F766E;
+  --tok-keyword: #B45309;
+  --tok-builtin: #1D4ED8;
+  --tok-number: #C2410C;
+  --tok-decorator: #6D28D9;
+}

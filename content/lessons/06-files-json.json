@@ -1,0 +1,77 @@
+{
+  "slug": "files-json",
+  "number": "06",
+  "title": "Working with Files & JSON",
+  "readTime": "8 min",
+  "subtitle": "Read and write text and JSON files safely using pathlib, context managers (with), and explicit UTF-8 encoding.",
+  "sections": [
+    {
+      "heading": "Context managers and pathlib",
+      "paragraphs": [
+        "Always open files using a <code>with</code> block (a context manager) so Python automatically closes the file handle even if an error happens halfway through reading or writing.",
+        "Modern Python also provides <code>pathlib.Path</code> for clean, cross-platform paths and concise helpers like <code>path.write_text(..., encoding=\"utf-8\")</code> and <code>path.read_text(encoding=\"utf-8\")</code>. (In this browser notebook, files are stored in Pyodide's virtual in-memory filesystem.)"
+      ]
+    },
+    {
+      "heading": "Serializing structured data with json",
+      "paragraphs": [
+        "The standard library <code>json</code> module converts Python dictionaries and lists to JSON strings (<code>json.dumps</code>) or writes them straight to a file (<code>json.dump</code>), and parses them back with <code>json.loads</code> / <code>json.load</code>."
+      ],
+      "bullets": [
+        "Pass <code>indent=2</code> to <code>json.dumps()</code> for human-readable output.",
+        "Always specify <code>encoding=\"utf-8\"</code> when reading or writing text files.",
+        "JSON supports dicts, lists, strings, numbers, booleans, and <code>null</code> (<code>None</code>)—not Python <code>set</code> or custom objects directly."
+      ]
+    }
+  ],
+  "marginNote": {
+    "title": "Common Mistakes: json.dumps vs. json.dump",
+    "paragraphs": [
+      "<code>json.dumps(obj)</code> (with an <strong>s</strong>) returns a <strong>string</strong>; <code>json.dump(obj, file)</code> writes directly into an open <strong>file object</strong>.",
+      "Passing a file handle to <code>json.dumps</code> or forgetting the file handle in <code>json.dump</code> is a classic beginner TypeError."
+    ]
+  },
+  "mainCell": {
+    "title": "Saving and loading structured records with pathlib and json",
+    "code": "import json\nfrom pathlib import Path\n\nsettings_path = Path(\"app_config.json\")\nconfig = {\n    \"app\": \"PyFolio\",\n    \"theme\": \"dark\",\n    \"recent_lessons\": [1, 2, 3],\n}\n\n# Write formatted JSON safely\nwith settings_path.open(\"w\", encoding=\"utf-8\") as f:\n    json.dump(config, f, indent=2)\n\n# Read it back and verify round-trip\nwith settings_path.open(\"r\", encoding=\"utf-8\") as f:\n    loaded = json.load(f)\n\nprint(\"File exists in virtual FS:\", settings_path.exists())\nprint(\"Loaded JSON:\\n\" + json.dumps(loaded, indent=2))"
+  },
+  "breakIt": {
+    "title": "Try Breaking It: Fix the json.dumps vs json.dump confusion & non-serializable set",
+    "prompt": "This snippet tries to write a Python `set` into JSON (which JSON does not support!) and mixes up `json.dump` with `json.dumps`. Convert the set to a sorted `list` and pass the file handle `f` to `json.dump`.",
+    "buggyCode": "import json\nfrom pathlib import Path\n\nout = Path(\"tags.json\")\npayload = {\"tags\": {\"python\", \"json\", \"files\"}}  # Bug 1: sets are not JSON-serializable\n\nwith out.open(\"w\", encoding=\"utf-8\") as f:\n    # Bug 2: json.dumps returns a string; it doesn't take a file handle as 2nd arg!\n    json.dumps(payload, f)\n\nprint(out.read_text(encoding=\"utf-8\"))",
+    "hint": "Replace `{\"python\", \"json\", \"files\"}` with `sorted({\"python\", \"json\", \"files\"})` (a list) and call `json.dump(payload, f, indent=2)`.",
+    "solution": "import json\nfrom pathlib import Path\n\nout = Path(\"tags.json\")\npayload = {\"tags\": sorted({\"python\", \"json\", \"files\"})}\n\nwith out.open(\"w\", encoding=\"utf-8\") as f:\n    json.dump(payload, f, indent=2)\n\nprint(out.read_text(encoding=\"utf-8\"))"
+  },
+  "quiz": [
+    {
+      "question": "Why should files be opened with `with Path(...).open(...) as f:`?",
+      "options": [
+        "The context manager guarantees the file is closed automatically when the block exits, even on errors.",
+        "It encrypts the file contents automatically.",
+        "It converts text files into binary executables."
+      ],
+      "answerIndex": 0,
+      "explanation": "Context managers (`with`) handle setup and teardown reliably so file descriptors don't leak."
+    },
+    {
+      "question": "What is the difference between `json.load(f)` and `json.loads(s)`?",
+      "options": [
+        "`json.load(f)` reads from an open file object; `json.loads(s)` parses a JSON string.",
+        "`json.loads` only works on lists.",
+        "They are identical aliases."
+      ],
+      "answerIndex": 0,
+      "explanation": "The `s` suffix in `loads` / `dumps` stands for string."
+    },
+    {
+      "question": "Which Python built-in type cannot be serialized directly to JSON without conversion?",
+      "options": [
+        "`set` (e.g. `{\"a\", \"b\"}`)",
+        "`list` (e.g. `[\"a\", \"b\"]`)",
+        "`dict` (e.g. `{\"a\": 1}`)"
+      ],
+      "answerIndex": 0,
+      "explanation": "JSON has arrays (`list`) and objects (`dict`), but no set type—convert sets to `list` or `sorted(my_set)` first."
+    }
+  ]
+}

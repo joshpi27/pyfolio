@@ -1,0 +1,77 @@
+{
+  "slug": "functions-scope",
+  "number": "03",
+  "title": "Functions & Scope",
+  "readTime": "8 min",
+  "subtitle": "Package logic into small, testable functions with clear parameters, explicit returns, and safe default arguments.",
+  "sections": [
+    {
+      "heading": "Parameters, return values, and docstrings",
+      "paragraphs": [
+        "A function defined with <code>def</code> takes inputs (parameters), computes a result, and sends it back with <code>return</code>. Returning values—rather than just printing them—lets other functions compose and test your work.",
+        "A short triple-quoted docstring right under the <code>def</code> line documents what the function expects and returns."
+      ]
+    },
+    {
+      "heading": "Local scope and default arguments",
+      "paragraphs": [
+        "Variables created inside a function live in its <strong>local scope</strong> and disappear when the function returns. Depending on mutable global variables makes functions unpredictable; passing inputs as arguments keeps behavior explicit."
+      ],
+      "bullets": [
+        "Use keyword arguments like <code>discount=0.1</code> for clarity at call sites.",
+        "A function without a <code>return</code> statement implicitly returns <code>None</code>.",
+        "Never use a mutable list or dict as a default parameter value."
+      ]
+    }
+  ],
+  "marginNote": {
+    "title": "Common Mistakes: Mutable Default Arguments",
+    "paragraphs": [
+      "Writing <code>def add_tag(tag, tags=[]):</code> creates ONE shared list when the function is first defined. Every future call without a second argument mutates that same list!",
+      "Always write <code>def add_tag(tag, tags=None):</code> and initialize <code>if tags is None: tags = []</code> inside the body."
+    ]
+  },
+  "mainCell": {
+    "title": "Pure functions, keyword arguments, and return tuples",
+    "code": "def apply_discount(price, rate=0.10, tax=0.05):\n    \"\"\"Return (discounted_subtotal, final_total) rounded to cents.\"\"\"\n    discounted = price * (1 - rate)\n    final_total = discounted * (1 + tax)\n    return round(discounted, 2), round(final_total, 2)\n\nsub, total = apply_discount(120.0, rate=0.20)\nprint(f\"Subtotal: ${sub:.2f} | With tax: ${total:.2f}\")\n\n# Default arguments still work cleanly\nsub2, total2 = apply_discount(50.0)\nprint(f\"Default 10% off $50 -> ${total2:.2f}\")"
+  },
+  "breakIt": {
+    "title": "Try Breaking It: Fix the shared default list bug",
+    "prompt": "Run the cell below. Notice `user_b` inherits `user_a`'s tag `'python'` because `tags=[]` is shared across calls! Fix `add_tag` using `tags=None`.",
+    "buggyCode": "def add_tag(tag, tags=[]):\n    tags.append(tag)\n    return tags\n\nuser_a = add_tag(\"python\")\nuser_b = add_tag(\"sql\")\n\nprint(\"User A tags:\", user_a)\nprint(\"User B tags (should only be ['sql']):\", user_b)\nassert user_b == [\"sql\"], f\"Leaked state! Got {user_b}\"",
+    "hint": "Change the signature to `def add_tag(tag, tags=None):` and add `if tags is None: tags = []`.",
+    "solution": "def add_tag(tag, tags=None):\n    if tags is None:\n        tags = []\n    tags.append(tag)\n    return tags\n\nuser_a = add_tag(\"python\")\nuser_b = add_tag(\"sql\")\n\nprint(\"User A tags:\", user_a)\nprint(\"User B tags:\", user_b)\nassert user_b == [\"sql\"]"
+  },
+  "quiz": [
+    {
+      "question": "What does a Python function return if it finishes without executing a `return` statement?",
+      "options": [
+        "`None`",
+        "`0`",
+        "The last printed string"
+      ],
+      "answerIndex": 0,
+      "explanation": "Every Python function returns `None` by default if no `return` value is specified."
+    },
+    {
+      "question": "Why is `def append_log(msg, logs=[]):` problematic?",
+      "options": [
+        "The empty list `[]` is created once at definition time and reused across all calls.",
+        "Python forbids empty lists as parameters.",
+        "`logs` becomes read-only inside the function."
+      ],
+      "answerIndex": 0,
+      "explanation": "Default expressions are evaluated once when `def` runs, not on each function call."
+    },
+    {
+      "question": "Why prefer `return result` over `print(result)` inside helper functions?",
+      "options": [
+        "Returned values can be stored, tested with `assert`, and passed into other functions.",
+        "`print()` cannot display numbers.",
+        "`return` makes the function run twice."
+      ],
+      "answerIndex": 0,
+      "explanation": "Printing only sends text to stdout; returning gives the caller data it can reuse."
+    }
+  ]
+}

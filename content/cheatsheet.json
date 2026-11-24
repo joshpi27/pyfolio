@@ -1,0 +1,68 @@
+{
+  "categories": ["All", "Strings", "Control Flow", "Functions", "Collections", "Files & JSON", "Classes"],
+  "items": [
+    {
+      "id": "str-fstring",
+      "category": "Strings",
+      "title": "Formatted f-string with alignment & precision",
+      "note": "Embed expressions, align columns, and round decimals cleanly.",
+      "code": "name, score = \"Ada\", 94.567\nprint(f\"{name:<8} | {score:.1f}%\")"
+    },
+    {
+      "id": "str-clean",
+      "category": "Strings",
+      "title": "Normalize whitespace & casing",
+      "note": "Strings are immutable; reassign or store the returned value.",
+      "code": "clean = raw_text.strip().lower()\nwords = clean.split()"
+    },
+    {
+      "id": "flow-enumerate",
+      "category": "Control Flow",
+      "title": "Iterate with index via enumerate()",
+      "note": "Avoid manual i += 1 counters in for loops.",
+      "code": "for idx, item in enumerate(items, start=1):\n    print(f\"{idx}. {item}\")"
+    },
+    {
+      "id": "fn-safe-default",
+      "category": "Functions",
+      "title": "Safe mutable default parameter",
+      "note": "Use None instead of [] so calls never share a list.",
+      "code": "def add_item(x, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(x)\n    return bucket"
+    },
+    {
+      "id": "col-comprehension",
+      "category": "Collections",
+      "title": "Filtered list & dict comprehensions",
+      "note": "Build transformed collections in one readable line.",
+      "code": "evens = [n for n in nums if n % 2 == 0]\nlengths = {w: len(w) for w in words}"
+    },
+    {
+      "id": "col-dict-get",
+      "category": "Collections",
+      "title": "Safe counting with dict.get()",
+      "note": "Prevent KeyError when keys have not been seen yet.",
+      "code": "counts = {}\nfor key in keys:\n    counts[key] = counts.get(key, 0) + 1"
+    },
+    {
+      "id": "err-try-except",
+      "category": "Control Flow",
+      "title": "Specific exception handling",
+      "note": "Catch only the exception you expect, never bare except:.",
+      "code": "try:\n    value = int(raw)\nexcept ValueError:\n    value = None"
+    },
+    {
+      "id": "file-json",
+      "category": "Files & JSON",
+      "title": "Read and write JSON with pathlib",
+      "note": "Always open text files with encoding='utf-8' inside with.",
+      "code": "import json\nfrom pathlib import Path\n\nwith Path(\"data.json\").open(\"w\", encoding=\"utf-8\") as f:\n    json.dump(payload, f, indent=2)"
+    },
+    {
+      "id": "cls-dataclass",
+      "category": "Classes",
+      "title": "Structured record with @dataclass",
+      "note": "Auto-generates __init__, __repr__, and == comparisons.",
+      "code": "from dataclasses import dataclass, field\n\n@dataclass\nclass Note:\n    title: str\n    tags: list = field(default_factory=list)"
+    }
+  ]
+}
